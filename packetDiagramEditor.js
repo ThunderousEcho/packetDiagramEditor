@@ -30,7 +30,6 @@ function start(){
 function updatePreview(){
 
     const parseResult = Papa.parse(document.getElementById("textarea").value, {comments: true});
-    console.log(parseResult);
 
     const table = document.getElementById("table");
     while (table.firstChild) {
