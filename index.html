@@ -1,0 +1,50 @@
+<html>
+    <head>
+        <link href="https://fonts.googleapis.com/css?family=Inconsolata&display=swap" rel="stylesheet">
+        <script src="papaparse.min.js"></script>
+        <script src="packetDiagramEditor.js"></script>
+        <style>
+            body{
+                margin: 0;
+                font-family: 'Inconsolata', monospace;
+            }
+            textarea {
+                float: right;
+                width: 25%;
+                height: 100%;
+                resize: none;
+            }
+            table{
+                float: left;
+                width: 75%;
+                table-layout:fixed;
+            }
+            .leftmost{
+                text-align: right;
+            }
+            th, td{
+                padding-bottom: 0.25em;
+                padding-top: 0.25em;
+                border-left: 0.25em solid rgba(0,0,0, 0);
+                border-right: 0.25em solid rgba(0,0,0, 0);
+                white-space: nowrap;
+                overflow: hidden;
+                text-overflow: ellipsis;
+            }
+        </style>
+    </head>
+    <body>
+        <table id="table" cellspacing="3"></table>
+        <textarea id="textarea" oninput="updatePreview()">
+Size (bits), Type, Name
+32, float, A Float
+32, int, A 32-bit signed integer
+16, uint, A 16-bit unsigned integer
+8, uint, A Byte
+4, uint, A Nibble
+1, uint, A Bit
+3, unused, Unused
+128, other, I Sure Love My 16 Bytes</textarea>
+            <script>start();</script>
+    </body>
+</html>
