@@ -1,6 +1,6 @@
 <html>
     <head>
-        <script src="papaparse.min.js"></script>
+        <script src="parser.js"></script>
         <script src="packetDiagramEditor.js"></script>
         <style>
             @font-face {
@@ -39,15 +39,16 @@
     <body>
         <table id="table" cellspacing="3"></table>
         <textarea id="textarea" oninput="updatePreview()">
-Size (bits), Type, Name
-32, float, A Float
-32, int, A 32-bit signed integer
-16, uint, A 16-bit unsigned integer
-8, uint, A Byte
-4, uint, A Nibble
-1, uint, A Bit
-3, unused, Unused
-128, other, I Sure Love My 16 Bytes</textarea>
+32-bit little-endian float A Float; A 32-bit floating point number.
+32-bit little-endian int An Int; A 32-bit signed integer.
+32-bit little-endian uint A UInt; A 32-bit unsigned integer.
+16-bit little-endian uint A UShort
+8-bit uint A Byte
+4-bit uint A Nibble
+1-bit uint A Bit
+3-bit unused Unused
+128-bit other I Sure Love My 16 Bytes
+128-bit utf-8 null-terminated string A String</textarea>
             <script>start();</script>
     </body>
 </html>

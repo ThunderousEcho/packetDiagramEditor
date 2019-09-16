@@ -1,10 +1,11 @@
 var colors = {
-    "float": "#ff91f1", 
     "uint": "orange", 
     "int": "#ffcd38", 
-    "other": "#74d474",
+    "float": "#ff91f1", 
     "unused": "#e3e3e3",
-    "reserved": "#e3e3e3"
+    "reserved": "#e3e3e3",
+    "string" : "#4df7ef",
+    "other": "#74d474"
 };
 
 function newRow(type, text){
@@ -29,16 +30,35 @@ function start(){
 
 function updatePreview(){
 
-    const parseResult = Papa.parse(document.getElementById("textarea").value, {comments: true});
-
     const table = document.getElementById("table");
     while (table.firstChild) {
         table.removeChild(table.firstChild);
     }
 
-    var row = newRow("th", "Bit");
+    const parseResult = parse(document.getElementById("textarea").value);
+    console.log(parseResult);
+
+    var unitIsBytes = true;
+    for (var i = 0; i < parseResult.length; i++) {
+        if (parseResult[i].sizeBits % 8 != 0){
+            unitIsBytes = false;
+            break;
+        }
+    }
+
+    var gr;
+    var unit;
+    if (unitIsBytes){
+        gr = 4;
+        unit = "Byte";
+    } else {
+        gr = 8;
+        unit = "Bit";
+    }
+
+    var row = newRow("th", unit);
     for (var i = 0; i < 32; i++){
-        var j = (((i / 8) >>> 0) % 2);
+        var j = (((i / gr) >>> 0) % 2);
         var headerCell = document.createElement("th");
         headerCell.innerText = i;
         headerCell.style.background = j == 1 ? "#a0a0a0" : "lightgray";
@@ -50,45 +70,30 @@ function updatePreview(){
     var columnIndex = 0;
     var rowIndex = 0;
 
-    const data = parseResult.data;
-    for (var i = 1; i < data.length; i++){
+    for (var i = 0; i < parseResult.length; i++) {
 
-        const element = data[i];
-        var size = 0;
-        var color = null;
-        var text = null;
-        if (element.length > 0){
-            size = parseInt(element[0]);
-            if (element.length > 1){
-                color = colors[element[1].trim()];
-                if (element.length > 2){
-                    text = element[2].trim();
-                }
-            }
+        var part = parseResult[i];
+
+        var color = "#ff9191";
+        if (typeof part.type !== 'undefined'){
+            color = colors[part.type];
         }
 
-        if (size <= 0 || isNaN(size)){
-            continue;
-        }
-
-        if (color == null){
-            color = "#ff9191";
-        }
-
+        var size = unitIsBytes ? (part.sizeBits / 8) : part.sizeBits;
         var sizeRemaining = size;
 
         while (true){
 
             if (row == null){
-                row = newRow("td", ++rowIndex * 32);
+                row = newRow("td", rowIndex++ * 32);
             }
 
             const spaceRemaining = 32 - columnIndex;
             const cell = document.createElement("td");
             cell.style.background = color;
-            cell.innerText = text;
+            cell.innerText = part.name;
 
-            if (size != sizeRemaining){
+            if (sizeRemaining != size){
                 cell.style.borderLeft = "0.25em solid rgba(0,0,0, 0.15)";
             }
 
