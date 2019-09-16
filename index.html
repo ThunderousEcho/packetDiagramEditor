@@ -1,5 +1,7 @@
-<html>
+<!DOCTYPE html>
+<html onMouseUp="moving = false;" onmousemove="g(event);">
     <head>
+        <script src="html2canvas.min.js"></script>
         <script src="parser.js"></script>
         <script src="packetDiagramEditor.js"></script>
         <style>
@@ -8,47 +10,101 @@
                 src: url('Inconsolata-Regular.ttf') format('truetype');
             }  
             body{
-                margin: 0;
+                margin:0;
                 font-family: 'Inconsolata', monospace;
+            }
+            input{
+                font-family: 'Inconsolata', monospace;
+                margin: 3px;
             }
             textarea {
                 float: right;
-                width: 25%;
+                width: 33%;
                 height: 100%;
+                right: 0%;
                 resize: none;
+                position:fixed;
             }
             table{
-                float: left;
-                width: 75%;
+                width: 100%;
                 table-layout:fixed;
+            }
+            .left{
+                float: left;
+                width: 66%;
             }
             .leftmost{
                 text-align: right;
+                padding-right: 0.25em;
             }
             th, td{
-                padding-bottom: 0.25em;
-                padding-top: 0.25em;
-                border-left: 0.25em solid rgba(0,0,0, 0);
-                border-right: 0.25em solid rgba(0,0,0, 0);
+                height: 20px;
+                padding: 0;
                 white-space: nowrap;
                 overflow: hidden;
                 text-overflow: ellipsis;
+                text-align: center;
+            }
+            .rightCont{
+                float: right;
+                width: 0.25em;
+                height: 20px;
+                background-color: rgba(0,0,0, 0.15);
+            }
+            .leftCont{
+                float: left;
+                width: 0.25em;
+                height: 20px;
+                background-color: rgba(0,0,0, 0.15);
+            }
+            .resizer{
+                right: 33%;
+                width: 1%;
+                height: 100%;
+                position:fixed;
+            }
+            .resizer:hover{
+                cursor: ew-resize;
+            }
+            input {
+                background-color: lightgray;
+                border: none;
+                padding: 7px 15px;
+                text-align: center;
+                text-decoration: none;
+                display: inline-block;
+                font-size: 16px;
+            }
+            input:hover {
+                background-color: gray;
             }
         </style>
     </head>
     <body>
-        <table id="table" cellspacing="3"></table>
-        <textarea id="textarea" oninput="updatePreview()">
+        <font size="2">
+            <div id = "left" class="left">
+                <span style="font-size: 0">
+                    <input type="button" value="Open" onclick="openFile()"/>
+                    <input id="fileInput" type="file" style="display:none;" onchange="onFileSelected()"/>
+                    <input type="button" value="Save" onclick="save()"/>
+                    <input type="button" value="Export" onclick="screenshot()"/>
+                </span>
+                <table id="table" cellspacing="3"></table>
+            </div>
+            <div id = "resizer" class="resizer" onMouseDown="moving = true;"></div>
+            <textarea id="textarea" oninput="updatePreview()">
 32-bit little-endian float A Float; A 32-bit floating point number.
 32-bit little-endian int An Int; A 32-bit signed integer.
 32-bit little-endian uint A UInt; A 32-bit unsigned integer.
 16-bit little-endian uint A UShort
 8-bit uint A Byte
 4-bit uint A Nibble
-1-bit uint A Bit
+1-bit bool A Bit
 3-bit unused Unused
 128-bit other I Sure Love My 16 Bytes
+4-byte reserved Reserved For Future Use
 128-bit utf-8 null-terminated string A String</textarea>
-            <script>start();</script>
+        </font>
+        <script>start();</script>
     </body>
 </html>

@@ -1,5 +1,5 @@
 var types = [
-    "uint", "int", "float", "unused", "reserved", "string", "other"
+    "uint", "int", "float", "unused", "reserved", "string", "bool", "other"
 ];
 
 function parse(str){
@@ -33,6 +33,9 @@ function parse(str){
             } else {
                 keyword += character;
             }
+        }
+        if (keyword != ""){
+            parseKeyword(keyword, part);
         }
 
         if (typeof part.sizeBits !== 'undefined'){
